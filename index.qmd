@@ -277,7 +277,7 @@ area_union_riqueza |>
   )
 ```
 
-# Gráfico de puntoss de riqueza de especies de orquídeas en áreas de conservación
+# Gráfico de barras de riqueza de especies de orquídeas en áreas de conservación
 ```{r}
 #| leabel: grafico
 #| warning: false
@@ -285,23 +285,15 @@ area_union_riqueza |>
 #| message: false
 
 barras <-
-area_union_riqueza |>
-  ggplot(aes(x = riqueza_especies_orquideas, y = nombre_ac)) +
-  geom_point(
-    aes(
-      text = paste0(
-        "Cantidad de Especies en cada Área:", round(after_stat(x), 0 ), "\n"
-      )
-    )
-  ) +
-  ggtitle("Riqueza de especies de orquídeas en áreas de conservación") +
-  xlab("Cantidad de Especie") +
-  ylab("'Área") +
-  labs() +
-  scale_colour_brewer(palette = "YlOrBr", direction = -1) +
+  area_union_riqueza |> 
+  ggplot(aes(x = reorder(nombre_ac, -riqueza_especies_orquideas), y = riqueza_especies_orquideas))  +
+  geom_col() +
+  ggtitle("Especies de orquideas por áreas de conservación") +
+  xlab("Áreas de conservación") +
+  ylab("Cantidad de Especies") +
   theme_bw()
 
-ggplotly(barras, tooltip = "text") |> 
+ggplotly(barras) |> 
   config(locale = 'es')
 
 ```
@@ -312,23 +304,26 @@ ggplotly(barras, tooltip = "text") |>
 #| warning: false
 #| code-fold: true
 #| message: false
+
 barras2 <-
 area_union_riqueza |>
-  ggplot(aes(x = riqueza_especies_orquideas, y = stat(x))) +
-  geom_bar(
+  ggplot(aes(x = reorder(nombre_ac, riqueza_especies_orquideas), y = riqueza_especies_orquideas))  +
+  geom_col(
     aes(
       text = paste0(
-        "Cantidad de Especies en cada Área:", round(after_stat(x), 0 ), "\n"
+        "Presencia de especies de orquideas:", round(after_stat(x), 0 ), "\n"
       )
     )
   ) +
-  ggtitle("Riqueza de especies de orquídeas en áreas de conservación") +
-  xlab("Cantidad de Especie") +
-  ylab("'Área") +
+  ggtitle("Presencia de especies de orquideas") +
+  xlab("Área") +
+  ylab("'Cantidad de Especie") +
   theme_bw()
+  
 
 ggplotly(barras2, tooltip = "text") |> 
   config(locale = 'es')
+
 
 ```
 
